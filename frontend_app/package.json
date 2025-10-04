@@ -11,7 +11,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "e2e": "playwright test --config=playwright.config.ts",
+    "e2e:headed": "playwright test --config=playwright.config.ts --headed --project=chromium",
+    "e2e:ci": "CI=true playwright test --config=playwright.config.ts --reporter=list"
   },
   "jest": {
     "setupFilesAfterEnv": [
@@ -36,6 +39,8 @@
     ]
   },
   "devDependencies": {
-    "cross-env": "^7.0.3"
+    "@playwright/test": "^1.48.2",
+    "cross-env": "^7.0.3",
+    "typescript": "^5.0.0"
   }
 }
