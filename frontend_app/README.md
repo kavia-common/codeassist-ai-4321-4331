@@ -38,7 +38,7 @@ Available variables:
 
 - REACT_APP_BACKEND_BASE_URL (default http://localhost:3001)
 
-Make sure your backend is running and accessible at the above base URL or update the variable accordingly.
+Important: If the frontend is served over HTTPS (e.g., preview URLs), the backend must also be reachable via HTTPS to avoid mixed-content blocking. Set REACT_APP_BACKEND_BASE_URL to your HTTPS backend origin (e.g., https://<host>:3001). Use the provided .env.example as a starting point.
 
 ## API Integration
 
