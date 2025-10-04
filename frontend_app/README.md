@@ -1,82 +1,79 @@
-# Lightweight React Template for KAVIA
+# AI Copilot Frontend (Executive Gray)
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+A lightweight React app that provides a classic, business‑styled chat interface to interact with the AI Copilot backend. It supports three modes: Generate, Explain, and Debug.
 
 ## Features
 
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+- Executive Gray theme (primary #374151, secondary #9CA3AF, background #F9FAFB)
+- Classic chat layout with header, conversation history, and fixed input bar
+- Mode selector (Generate/Explain/Debug)
+- Code block rendering for responses (``` fenced blocks)
+- Accessible labels, aria-live updates, and loading state
+- API helper with environment-based backend base URL
+
+## Prerequisites
+
+- Node.js 16+ and npm
 
 ## Getting Started
 
-In the project directory, you can run:
+Install dependencies and start the development server:
 
-### `npm start`
-
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-### `npm test`
-
-Launches the test runner in interactive watch mode.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-## Customization
-
-### Colors
-
-The main brand colors are defined as CSS variables in `src/App.css`:
-
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
+```bash
+npm install
+npm start
 ```
 
-### Components
+Open http://localhost:3000 in your browser.
 
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
+## Environment Variables
 
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
+Copy `.env.example` to `.env` and adjust if needed:
 
-## Learn More
+```bash
+cp .env.example .env
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Available variables:
 
-### Code Splitting
+- REACT_APP_BACKEND_BASE_URL (default http://localhost:3001)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Make sure your backend is running and accessible at the above base URL or update the variable accordingly.
 
-### Analyzing the Bundle Size
+## API Integration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+The app communicates with the backend’s REST endpoints:
 
-### Making a Progressive Web App
+- POST /generate
+- POST /explain
+- POST /debug
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Configuration is centralized in `src/api.js`. The base URL is taken from `REACT_APP_BACKEND_BASE_URL` or falls back to `http://localhost:3001`.
 
-### Advanced Configuration
+## Project Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- `src/components/Header.js` - App header with title and connection info
+- `src/components/MessageBubble.js` - User/assistant message bubbles with code blocks
+- `src/components/InputBar.js` - Mode selector, textarea, and send button
+- `src/api.js` - API helper (postGenerate, postExplain, postDebug)
+- `src/App.js` - Main composition and state management
+- `src/App.css` and `src/index.css` - Theme and layout styles
 
-### Deployment
+## Testing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```bash
+npm test
+```
 
-### `npm run build` fails to minify
+## Build
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+npm run build
+```
+
+Outputs production assets into the `build` folder.
+
+## Notes
+
+- The app includes basic error handling. Errors from the backend are shown as an alert banner and echoed into the chat for visibility.
+- No third-party UI or markdown libraries are used to keep the bundle lightweight.
