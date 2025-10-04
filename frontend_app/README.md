@@ -10,6 +10,7 @@ A lightweight React app that provides a classic, business‑styled chat interfac
 - Code block rendering for responses (``` fenced blocks)
 - Accessible labels, aria-live updates, and loading state
 - API helper with environment-based backend base URL
+- Built-in Diagnostics panel to verify connectivity to backend
 
 ## Prerequisites
 
@@ -50,9 +51,18 @@ The app communicates with the backend’s REST endpoints:
 
 Configuration is centralized in `src/api.js`. The base URL is taken from `REACT_APP_BACKEND_BASE_URL` or falls back to `http://localhost:3001`.
 
+## Diagnostics
+
+Use the "Diagnostics" button in the header to:
+- Run GET / (health)
+- Send sample requests to POST /generate, /explain, /debug
+- View results or precise error messages (CORS, mixed-content, missing key/model, etc.)
+
+This executes calls from the browser using the configured `REACT_APP_BACKEND_BASE_URL`, helping identify mixed-content or CORS issues immediately.
+
 ## Project Structure
 
-- `src/components/Header.js` - App header with title and connection info
+- `src/components/Header.js` - App header with title and connection info (+ Diagnostics)
 - `src/components/MessageBubble.js` - User/assistant message bubbles with code blocks
 - `src/components/InputBar.js` - Mode selector, textarea, and send button
 - `src/api.js` - API helper (postGenerate, postExplain, postDebug)
