@@ -10,8 +10,15 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.js",
+      "<rootDir>/jest.setup.js"
+    ],
+    "testEnvironment": "jsdom"
   },
   "eslintConfig": {
     "extends": "react-app"
