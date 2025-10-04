@@ -63,6 +63,41 @@ async function postJSON(path, body) {
   return payload;
 }
 
+/**
+ * Internal helper to GET JSON from a given path.
+ */
+async function getJSON(path) {
+  const url = `${BASE_URL}${path}`;
+  checkMixedContent(BASE_URL);
+  let res;
+  try {
+    res = await fetch(url, { method: "GET" });
+  } catch (networkErr) {
+    const details = networkErr?.message || "Network request failed.";
+    const hint =
+      `Failed to reach ${url}. Ensure the backend is running and CORS/base URL are configured. ` +
+      `If using a preview, set REACT_APP_BACKEND_BASE_URL to your backend origin (e.g., https://<host>:3001).`;
+    const err = new Error(`${details} ${hint}`);
+    err.cause = networkErr;
+    throw err;
+  }
+  const contentType = res.headers.get("content-type") || "";
+  const isJson = contentType.includes("application/json");
+  const payload = isJson ? await res.json().catch(() => null) : null;
+  if (!res.ok) {
+    const message =
+      payload?.error?.message ||
+      payload?.message ||
+      `Request failed with status ${res.status}`;
+    const err = new Error(message);
+    err.status = res.status;
+    err.payload = payload;
+    err.url = url;
+    throw err;
+  }
+  return payload;
+}
+
 // PUBLIC_INTERFACE
 export async function postGenerate({ prompt, language, systemPrompt, model } = {}) {
   /** Posts to /generate with the user's prompt and optional parameters.
@@ -119,4 +154,10 @@ export async function getHealth() {
     err.cause = e;
     throw err;
   }
+}
+
+// PUBLIC_INTERFACE
+export async function getHello() {
+  /** Calls GET /api/hello to verify API connectivity over the configured base URL. Returns JSON payload. */
+  return getJSON("/api/hello");
 }

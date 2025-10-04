@@ -4,7 +4,7 @@ import "./index.css";
 import Header from "./components/Header";
 import MessageBubble from "./components/MessageBubble";
 import InputBar from "./components/InputBar";
-import { postDebug, postExplain, postGenerate } from "./api";
+import { postDebug, postExplain, postGenerate, getHello, getBaseUrl } from "./api";
 
 // PUBLIC_INTERFACE
 function App() {
@@ -17,6 +17,7 @@ function App() {
   ]);
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState("");
+  const [helloMsg, setHelloMsg] = useState("");
 
   const chatRef = useRef(null);
 
@@ -26,6 +27,30 @@ function App() {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
   }, [messages, isSending]);
+
+  // Integration check: call GET ${backend}/api/hello once and log/display the response
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const hello = await getHello();
+        if (!cancelled) {
+          const text = typeof hello === "string" ? hello : JSON.stringify(hello);
+          setHelloMsg(text);
+          // eslint-disable-next-line no-console
+          console.log(`[AI Copilot] /api/hello via ${getBaseUrl()}:`, hello);
+        }
+      } catch (e) {
+        if (!cancelled) {
+          const msg = e?.message || "Hello check failed.";
+          setHelloMsg(`hello error: ${msg}`);
+          // eslint-disable-next-line no-console
+          console.warn("[AI Copilot] /api/hello failed:", e);
+        }
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   // PUBLIC_INTERFACE
   const handleSubmit = async ({ mode, text }) => {
@@ -84,6 +109,11 @@ function App() {
           </div>
         )}
       </main>
+      {helloMsg ? (
+        <div style={{ position: "fixed", right: 12, bottom: 72, fontSize: 11, color: "var(--muted)" }} aria-live="polite">
+          hello: {helloMsg}
+        </div>
+      ) : null}
       <InputBar onSubmit={handleSubmit} disabled={isSending} />
     </div>
   );
